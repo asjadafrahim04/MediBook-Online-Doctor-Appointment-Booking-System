@@ -43,7 +43,15 @@
                                     <div class="bg-gradient-to-b from-gray-50 to-gray-100 p-6 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
                                         <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ $day }}</h3>
                                         @if(isset($availability[$day]))
-                                            @php $slot = $availability[$day]->first(); @endphp
+                                            @php 
+                                                $slot = $availability[$day]->first();
+                                                // Calculate next occurrence of this day
+                                                $nextDate = \Carbon\Carbon::now();
+                                                while ($nextDate->englishDayOfWeek !== $day) {
+                                                    $nextDate->addDay();
+                                                }
+                                                $formattedDate = $nextDate->format('Y-m-d');
+                                            @endphp
                                             <div class="text-green-600 font-bold text-lg">
                                                 {{ \Carbon\Carbon::parse($slot->start_time)->format('g:i A') }}
                                                 –
@@ -52,9 +60,20 @@
                                             <p class="text-sm text-gray-600 mt-3">
                                                 {{ $slot->slot_duration_minutes }}-minute appointments
                                             </p>
-                                            <a href="#" class="inline-block mt-6 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition text-sm">
-                                                Book {{ $day }}
-                                            </a>
+                                            
+                                            <!-- Updated Book Button with actual link -->
+                                            @if(auth()->user()->role === 'patient')
+                                                <a href="{{ route('appointments.create', $doctor) }}?date={{ $formattedDate }}" 
+                                                   class="inline-block mt-6 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition text-sm">
+                                                    Book {{ $day }}
+                                                </a>
+                                            @else
+                                                <button class="inline-block mt-6 px-6 py-3 bg-gray-400 text-white font-medium rounded-lg cursor-not-allowed text-sm"
+                                                        disabled>
+                                                    Book {{ $day }}
+                                                </button>
+                                                <p class="text-xs text-gray-500 mt-2">Only patients can book</p>
+                                            @endif
                                         @else
                                             <p class="text-red-500 font-medium">Unavailable</p>
                                         @endif
@@ -63,6 +82,20 @@
                             </div>
                         @endif
                     </div>
+
+                    <!-- Important Booking Info -->
+                    @if(auth()->user()->role === 'patient')
+                        <div class="mt-10 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-3">📋 How to Book:</h3>
+                            <ol class="list-decimal list-inside text-blue-700 space-y-2">
+                                <li>Click "Book [Day]" on an available day</li>
+                                <li>Select your preferred time slot</li>
+                                <li>Add symptoms (optional)</li>
+                                <li>Confirm your booking</li>
+                                <li>View your appointment in "My Appointments"</li>
+                            </ol>
+                        </div>
+                    @endif
 
                     <!-- Back Button -->
                     <div class="mt-12 text-center">

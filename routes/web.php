@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorScheduleController;
-use App\Http\Controllers\DoctorProfileController; // Added for profile setup
+use App\Http\Controllers\DoctorProfileController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\PatientAppointmentController;
 
 // Home Page (Public)
 Route::get('/', function () {
@@ -39,15 +41,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/doctor/schedule', [DoctorScheduleController::class, 'edit'])->name('doctor.schedule.edit');
     Route::patch('/doctor/schedule', [DoctorScheduleController::class, 'update'])->name('doctor.schedule.update');
 
-    // NEW: Doctor Profile Setup Form (after registration)
+    // Doctor Profile Setup Form (after registration)
     Route::get('/doctor/profile/create', [DoctorProfileController::class, 'create'])->name('doctor.profile.create');
     Route::post('/doctor/profile', [DoctorProfileController::class, 'store'])->name('doctor.profile.store');
 
-    // === TEMPORARY "Coming Soon" PAGES (Not built yet) ===
+    // === APPOINTMENT BOOKING SYSTEM ===
 
-    Route::get('/patient/appointments', function () {
-        return view('coming-soon', ['title' => 'My Appointments']);
-    })->name('patient.appointments');
+    // Appointment Booking - Patient selects time slot
+    Route::get('/appointments/create/{doctor}', [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::delete('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+
+    // Patient Appointments (REAL - replaces coming soon)
+    Route::get('/patient/appointments', [PatientAppointmentController::class, 'index'])->name('patient.appointments');
+
+    // === TEMPORARY "Coming Soon" PAGES (Not built yet) ===
 
     Route::get('/doctor/today', function () {
         return view('coming-soon', ['title' => "Today's Patients"]);
