@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',   // Optional but good to have
+        'role',    // Already there — perfect!
     ];
 
     /**
@@ -40,5 +41,15 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => 'string', // Good to cast role
     ];
+
+    /**
+     * Get the doctor record associated with the user.
+     * One-to-one relationship: one user → one doctor record
+     */
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
 }
