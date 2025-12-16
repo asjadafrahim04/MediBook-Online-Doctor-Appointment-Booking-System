@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorScheduleController;
+use App\Http\Controllers\DoctorProfileController; // Added for profile setup
 
 // Home Page (Public)
 Route::get('/', function () {
@@ -21,22 +22,26 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Profile Routes
+    // Profile Routes (general user profile)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // === REAL FEATURES WE HAVE BUILT ===
 
-    // Find Doctors (Patient) - Real page
+    // Find Doctors (Patient view)
     Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
 
-    // Doctor Profile & Calendar (Patient clicks doctor)
+    // Doctor Profile & Calendar (Patient view)
     Route::get('/doctors/{doctor}', [DoctorController::class, 'show'])->name('doctors.show');
 
-    // Doctor Schedule Page - Real form to set availability
+    // Doctor Schedule - Set weekly availability
     Route::get('/doctor/schedule', [DoctorScheduleController::class, 'edit'])->name('doctor.schedule.edit');
     Route::patch('/doctor/schedule', [DoctorScheduleController::class, 'update'])->name('doctor.schedule.update');
+
+    // NEW: Doctor Profile Setup Form (after registration)
+    Route::get('/doctor/profile/create', [DoctorProfileController::class, 'create'])->name('doctor.profile.create');
+    Route::post('/doctor/profile', [DoctorProfileController::class, 'store'])->name('doctor.profile.store');
 
     // === TEMPORARY "Coming Soon" PAGES (Not built yet) ===
 
