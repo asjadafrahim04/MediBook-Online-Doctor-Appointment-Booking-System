@@ -2,16 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\DoctorScheduleController;
 
 // Home Page (Public)
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Include Breeze auth routes (login, register, logout, etc.)
+// Include Breeze auth routes (login, register, logout, password reset, etc.)
 require __DIR__.'/auth.php';
 
-// Authenticated Routes (Only logged-in users)
+// Authenticated Routes (Only for logged-in users)
 Route::middleware('auth')->group(function () {
 
     // Dashboard
@@ -24,31 +26,32 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // === Temporary "Coming Soon" Pages for All Features ===
+    // === REAL FEATURES WE HAVE BUILT ===
 
-    // Patient Features
-    Route::get('/doctors', function () {
-        return view('coming-soon', ['title' => 'Find Doctors']);
-    })->name('doctors.index');
+    // Find Doctors (Patient) - Real page
+    Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
+
+    // Doctor Profile & Calendar (Patient clicks doctor)
+    Route::get('/doctors/{doctor}', [DoctorController::class, 'show'])->name('doctors.show');
+
+    // Doctor Schedule Page - Real form to set availability
+    Route::get('/doctor/schedule', [DoctorScheduleController::class, 'edit'])->name('doctor.schedule.edit');
+    Route::patch('/doctor/schedule', [DoctorScheduleController::class, 'update'])->name('doctor.schedule.update');
+
+    // === TEMPORARY "Coming Soon" PAGES (Not built yet) ===
 
     Route::get('/patient/appointments', function () {
         return view('coming-soon', ['title' => 'My Appointments']);
     })->name('patient.appointments');
 
-    // Doctor Features
     Route::get('/doctor/today', function () {
         return view('coming-soon', ['title' => "Today's Patients"]);
     })->name('doctor.today');
-
-    Route::get('/doctor/schedule', function () {
-        return view('coming-soon', ['title' => 'My Schedule']);
-    })->name('doctor.schedule.edit');
 
     Route::get('/doctor/appointments', function () {
         return view('coming-soon', ['title' => 'All Appointments']);
     })->name('doctor.appointments');
 
-    // Admin Features
     Route::get('/admin/doctors', function () {
         return view('coming-soon', ['title' => 'Manage Doctors']);
     })->name('admin.doctors.index');
