@@ -14,17 +14,11 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -35,7 +29,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -44,19 +37,14 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // If user registered as doctor, automatically create doctor profile
-        if ($request->role === 'doctor') {
-            $user->doctor()->create([
-                'specialization' => 'General Physician', // Default — doctor can update later
-                'qualification' => 'MBBS',
-                'experience_years' => 0,
-                'status' => 'approved', // Change to 'pending' if you want admin approval
-            ]);
-        }
-
         event(new Registered($user));
 
         Auth::login($user);
+
+        // If doctor, redirect to profile setup form
+        if ($user->role === 'doctor') {
+            return redirect()->route('doctor.profile.create');
+        }
 
         return redirect('/dashboard');
     }
