@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-8 text-gray-900">
 
@@ -10,13 +10,13 @@
                     </h1>
 
                     @if(auth()->user()->role === 'patient')
-                        <!-- Patient Dashboard -->
+                        <!-- Patient Dashboard - Only 3 Cards -->
                         <div class="text-center">
                             <p class="text-xl text-gray-700 mb-8">
                                 Book your next appointment easily
                             </p>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <a href="{{ route('doctors.index') }}" class="block p-8 bg-blue-50 rounded-lg hover:bg-blue-100 transition border border-blue-200">
                                     <div class="text-5xl mb-4">🔍</div>
                                     <h3 class="text-xl font-semibold text-blue-800">Find Doctors</h3>
@@ -28,11 +28,17 @@
                                     <h3 class="text-xl font-semibold text-green-800">My Appointments</h3>
                                     <p class="text-gray-600 mt-2">View upcoming and past appointments</p>
                                 </a>
+
+                                <a href="{{ route('patient.profile') }}" class="block p-8 bg-purple-50 rounded-lg hover:bg-purple-100 transition border border-purple-200">
+                                    <div class="text-5xl mb-4">👤</div>
+                                    <h3 class="text-xl font-semibold text-purple-800">My Profile</h3>
+                                    <p class="text-gray-600 mt-2">View and edit your information</p>
+                                </a>
                             </div>
                         </div>
 
                     @elseif(auth()->user()->role === 'doctor')
-                        <!-- Doctor Dashboard -->
+                        <!-- Doctor Dashboard - Only 3 Cards -->
                         <div class="text-center">
                             <p class="text-xl text-gray-700 mb-8">
                                 Manage your schedule and patients
