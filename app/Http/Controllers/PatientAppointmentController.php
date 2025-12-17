@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +9,7 @@ class PatientAppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Auth::user()->appointments()
+        $appointments = Auth::user()->appointmentsAsPatient()
             ->with('doctor.user')
             ->orderBy('appointment_date', 'desc')
             ->orderBy('start_time', 'desc')

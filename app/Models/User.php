@@ -11,50 +11,49 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'phone',   // Optional but good to have
-        'role',    // Already there — perfect!
+        'phone',
+        'role',
+        'profile_photo',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'role' => 'string', // Good to cast role
+        'role' => 'string',
     ];
 
-    /**
-     * Get the doctor record associated with the user.
-     * One-to-one relationship: one user → one doctor record
-     */
     public function doctor()
     {
         return $this->hasOne(Doctor::class);
     }
 
-    public function appointments()
+    public function appointmentsAsPatient()
     {
-    return $this->hasMany(Appointment::class, 'patient_id');
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
+    public function appointmentsAsDoctor()
+    {
+        return $this->hasManyThrough(Appointment::class, Doctor::class, 'user_id', 'doctor_id');
+    }
+
+    /**
+     * Get the profile photo URL attribute.
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=6366f1&color=fff&size=256&bold=true';
     }
 }
