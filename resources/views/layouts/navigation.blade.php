@@ -34,7 +34,8 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <!-- Fixed: Link to custom patient profile -->
+                        <x-dropdown-link :href="route('patient.profile')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -80,7 +81,8 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <!-- Fixed: Responsive link to custom patient profile -->
+                <x-responsive-nav-link :href="route('patient.profile')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

@@ -1,22 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PatientAppointmentController;
+use App\Http\Controllers\PatientProfileController; // Added
 
-// Home Page (Public)
+// Public Route
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Include Breeze auth routes (login, register, logout, password reset, etc.)
+// Breeze Authentication Routes
 require __DIR__.'/auth.php';
 
-// Authenticated Routes (Only for logged-in users)
+// Authenticated Routes
 Route::middleware('auth')->group(function () {
 
     // Dashboard
@@ -24,38 +24,41 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Profile Routes (general user profile)
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // === CUSTOM PATIENT PROFILE (Replaces Breeze default) ===
+    Route::get('/profile', [PatientProfileController::class, 'show'])->name('patient.profile');
+    Route::patch('/profile', [PatientProfileController::class, 'update'])->name('patient.profile.update');
+    Route::patch('/profile/password', [PatientProfileController::class, 'changePassword'])->name('patient.password.update');
+    Route::delete('/profile', [PatientProfileController::class, 'deleteAccount'])->name('patient.account.delete');
 
-    // === REAL FEATURES WE HAVE BUILT ===
+    // ===================================
+    // PATIENT FEATURES
+    // ===================================
 
-    // Find Doctors (Patient view)
     Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
-
-    // Doctor Profile & Calendar (Patient view)
     Route::get('/doctors/{doctor}', [DoctorController::class, 'show'])->name('doctors.show');
+    Route::get('/patient/appointments', [PatientAppointmentController::class, 'index'])->name('patient.appointments');
 
-    // Doctor Schedule - Set weekly availability
+    // ===================================
+    // DOCTOR FEATURES
+    // ===================================
+
     Route::get('/doctor/schedule', [DoctorScheduleController::class, 'edit'])->name('doctor.schedule.edit');
     Route::patch('/doctor/schedule', [DoctorScheduleController::class, 'update'])->name('doctor.schedule.update');
 
-    // Doctor Profile Setup Form (after registration)
     Route::get('/doctor/profile/create', [DoctorProfileController::class, 'create'])->name('doctor.profile.create');
     Route::post('/doctor/profile', [DoctorProfileController::class, 'store'])->name('doctor.profile.store');
 
-    // === APPOINTMENT BOOKING SYSTEM ===
+    // ===================================
+    // APPOINTMENT BOOKING
+    // ===================================
 
-    // Appointment Booking - Patient selects time slot
     Route::get('/appointments/create/{doctor}', [AppointmentController::class, 'create'])->name('appointments.create');
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::delete('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
-    // Patient Appointments (REAL - replaces coming soon)
-    Route::get('/patient/appointments', [PatientAppointmentController::class, 'index'])->name('patient.appointments');
-
-    // === TEMPORARY "Coming Soon" PAGES (Not built yet) ===
+    // ===================================
+    // TEMPORARY FEATURES
+    // ===================================
 
     Route::get('/doctor/today', function () {
         return view('coming-soon', ['title' => "Today's Patients"]);
