@@ -7,7 +7,8 @@ use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PatientAppointmentController;
 use App\Http\Controllers\PatientProfileController;
-use App\Http\Controllers\DoctorTodayPatientsController; // NEW for Today's Patients
+use App\Http\Controllers\DoctorTodayPatientsController; 
+use App\Http\Controllers\DoctorAllAppointmentsController;
 
 // Home Page (Public)
 Route::get('/', function () {
@@ -51,10 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::delete('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
-    // === TEMPORARY FEATURES (coming soon) ===
-    Route::get('/doctor/appointments', function () {
-        return view('coming-soon', ['title' => 'All Appointments']);
-    })->name('doctor.appointments');
+    Route::get('/doctor/appointments', [DoctorAllAppointmentsController::class, 'index'])->name('doctor.appointments');
+    Route::delete('/doctor/appointments/{appointment}/cancel', [DoctorAllAppointmentsController::class, 'cancel'])->name('doctor.appointments.cancel');
 
     Route::get('/admin/doctors', function () {
         return view('coming-soon', ['title' => 'Manage Doctors']);
