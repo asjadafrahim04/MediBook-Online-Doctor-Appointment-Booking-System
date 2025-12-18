@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 
@@ -20,21 +21,31 @@ class DoctorController extends Controller
                     $q->where('name', 'like', "%{$search}%");
                 })->orWhere('specialization', 'like', "%{$search}%");
             })
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('doctors.index', compact('doctors', 'search'));
+        return view('admin.doctors.index', compact('doctors', 'search'));
     }
 
     /**
-     * Display the doctor profile and weekly availability
+     * Approve a doctor
      */
-    public function show(Doctor $doctor)
+    public function approve(Doctor $doctor)
     {
-        // No approval check - show all doctors
-        $doctor->load('user', 'availability');
+        $doctor->update(['status' => 'approved']);
 
-        $availability = $doctor->availability->groupBy('day_of_week');
+        return redirect()->route('admin.doctors.index')
+            ->with('success', 'Doctor approved successfully!');
+    }
 
-        return view('doctors.show', compact('doctor', 'availability'));
+    /**
+     * Reject a doctor
+     */
+    public function reject(Doctor $doctor)
+    {
+        $doctor->update(['status' => 'rejected']);
+
+        return redirect()->route('admin.doctors.index')
+            ->with('success', 'Doctor rejected successfully!');
     }
 }

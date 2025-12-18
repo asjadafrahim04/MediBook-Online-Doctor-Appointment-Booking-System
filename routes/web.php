@@ -60,6 +60,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::delete('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
+    // === DOCTOR PENDING PAGE ===
+    Route::get('/doctor/pending', function () {
+        return view('doctors.pending');
+    })->name('doctor.pending');
+
     // === ADMIN FEATURES ===
     Route::middleware('admin')->group(function () {
         Route::get('/admin/doctors', [AdminDoctorController::class, 'index'])->name('admin.doctors.index');
