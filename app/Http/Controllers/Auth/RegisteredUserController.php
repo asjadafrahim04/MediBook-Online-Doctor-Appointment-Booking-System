@@ -20,32 +20,44 @@ class RegisteredUserController extends Controller
     }
 
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'role' => ['required', 'in:patient,doctor'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+        'phone' => ['nullable', 'string', 'max:20'],
+        'role' => ['required', 'in:patient,doctor'],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'role' => $request->role,
+        'password' => Hash::make($request->password),
+    ]);
+
+    // FIX: Create doctor record for new doctors
+    if ($user->role === 'doctor') {
+        $user->doctor()->create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'specialization' => 'General Physician', // Default value to avoid null error
+            'qualification' => 'MBBS', // Default
+            'experience_years' => 0, // Default
+            'status' => 'pending',
         ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        // If doctor, redirect to profile setup form
-        if ($user->role === 'doctor') {
-            return redirect()->route('doctor.profile.create');
-        }
-
-        return redirect('/dashboard');
     }
+
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    if ($user->role === 'doctor') {
+        return redirect()->route('doctor.profile');
+    }
+
+    return redirect('/dashboard');
+}
 }

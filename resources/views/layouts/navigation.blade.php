@@ -34,10 +34,15 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <!-- Fixed: Link to custom patient profile -->
-                        <x-dropdown-link :href="route('patient.profile')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                        @if (auth()->user()->role === 'patient')
+                            <x-dropdown-link :href="route('patient.profile')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+                        @elseif (auth()->user()->role === 'doctor')
+                            <x-dropdown-link :href="route('doctor.profile')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+                        @endif
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -81,10 +86,15 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <!-- Fixed: Responsive link to custom patient profile -->
-                <x-responsive-nav-link :href="route('patient.profile')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
+                @if (auth()->user()->role === 'patient')
+                    <x-responsive-nav-link :href="route('patient.profile')">
+                        {{ __('Profile') }}
+                    </x-responsive-nav-link>
+                @elseif (auth()->user()->role === 'doctor')
+                    <x-responsive-nav-link :href="route('doctor.profile')">
+                        {{ __('Profile') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

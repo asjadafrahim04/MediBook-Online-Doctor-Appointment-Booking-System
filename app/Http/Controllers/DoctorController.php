@@ -8,14 +8,13 @@ use Illuminate\Http\Request;
 class DoctorController extends Controller
 {
     /**
-     * Display a list of approved doctors with search
+     * Display a list of all registered doctors with search
      */
     public function index(Request $request)
     {
         $search = $request->get('search');
 
         $doctors = Doctor::with('user')
-            ->approved()
             ->when($search, function ($query, $search) {
                 return $query->whereHas('user', function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%");
@@ -31,10 +30,7 @@ class DoctorController extends Controller
      */
     public function show(Doctor $doctor)
     {
-        if ($doctor->status !== 'approved') {
-            abort(404);
-        }
-
+        // No approval check - show all doctors
         $doctor->load('user', 'availability');
 
         $availability = $doctor->availability->groupBy('day_of_week');

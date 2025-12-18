@@ -11,6 +11,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     */
     protected $fillable = [
         'name',
         'email',
@@ -20,26 +23,41 @@ class User extends Authenticatable
         'profile_photo',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    /**
+     * The attributes that should be cast.
+     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'role' => 'string',
     ];
 
+    /**
+     * Get the doctor record associated with the user (for doctors).
+     */
     public function doctor()
     {
         return $this->hasOne(Doctor::class);
     }
 
+    /**
+     * Get the appointments where this user is the patient.
+     */
     public function appointmentsAsPatient()
     {
         return $this->hasMany(Appointment::class, 'patient_id');
     }
 
+    /**
+     * Get the appointments where this user is the doctor (through doctor relationship).
+     */
     public function appointmentsAsDoctor()
     {
         return $this->hasManyThrough(Appointment::class, Doctor::class, 'user_id', 'doctor_id');
@@ -54,6 +72,7 @@ class User extends Authenticatable
             return asset('storage/' . $this->profile_photo);
         }
 
+        // Default avatar with initials
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=6366f1&color=fff&size=256&bold=true';
     }
 }
