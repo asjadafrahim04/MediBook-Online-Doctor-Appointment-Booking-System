@@ -42,6 +42,10 @@
                             <x-dropdown-link :href="route('doctor.profile')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
+                        @elseif (auth()->user()->role === 'admin')
+                            <x-dropdown-link :href="route('admin.profile')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
                         @endif
 
                         <!-- Authentication -->
@@ -92,6 +96,10 @@
                     </x-responsive-nav-link>
                 @elseif (auth()->user()->role === 'doctor')
                     <x-responsive-nav-link :href="route('doctor.profile')">
+                        {{ __('Profile') }}
+                    </x-responsive-nav-link>
+                @elseif (auth()->user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('admin.profile')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
                 @endif

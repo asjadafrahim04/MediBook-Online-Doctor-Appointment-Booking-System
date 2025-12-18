@@ -9,6 +9,8 @@ use App\Http\Controllers\PatientAppointmentController;
 use App\Http\Controllers\PatientProfileController;
 use App\Http\Controllers\DoctorTodayPatientsController;
 use App\Http\Controllers\DoctorAllAppointmentsController;
+use App\Http\Controllers\Admin\DoctorController as AdminDoctorController;
+use App\Http\Controllers\AdminProfileController;
 
 // Home Page (Public)
 Route::get('/', function () {
@@ -58,8 +60,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::delete('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
-    // === TEMPORARY FEATURES ===
-    Route::get('/admin/doctors', function () {
-        return view('coming-soon', ['title' => 'Manage Doctors']);
-    })->name('admin.doctors.index');
+    // === ADMIN FEATURES ===
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/doctors', [AdminDoctorController::class, 'index'])->name('admin.doctors.index');
+        Route::post('/admin/doctors/{doctor}/approve', [AdminDoctorController::class, 'approve'])->name('admin.doctors.approve');
+        Route::post('/admin/doctors/{doctor}/reject', [AdminDoctorController::class, 'reject'])->name('admin.doctors.reject');
+
+        // Admin Profile Routes
+        Route::get('/admin/profile', [AdminProfileController::class, 'show'])->name('admin.profile');
+        Route::patch('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+        Route::patch('/admin/profile/password', [AdminProfileController::class, 'changePassword'])->name('admin.profile.password.update');
+        Route::delete('/admin/profile', [AdminProfileController::class, 'deleteAccount'])->name('admin.profile.delete');
+    });
 });
