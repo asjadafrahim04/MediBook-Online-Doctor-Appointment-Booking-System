@@ -14,7 +14,7 @@ class DoctorAvailability extends Model
      *
      * @var string
      */
-    protected $table = 'doctor_availabilities'; // Explicit if Laravel guesses wrong
+    protected $table = 'doctor_availabilities'; 
 
     /**
      * The attributes that are mass assignable.

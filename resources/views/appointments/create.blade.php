@@ -55,7 +55,7 @@
                                 @endforeach
                             </div>
 
-                            <!-- Symptoms (Optional) -->
+                            <!-- Symptoms -->
                             <div class="mt-10">
                                 <label for="symptoms" class="block text-lg font-medium text-gray-700 mb-3">
                                     Symptoms (Optional)

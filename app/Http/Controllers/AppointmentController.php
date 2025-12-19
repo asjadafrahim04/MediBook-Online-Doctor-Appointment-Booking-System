@@ -14,9 +14,9 @@ class AppointmentController extends Controller
     // Show booking form for a specific doctor and day
     public function create(Doctor $doctor, Request $request)
     {
-        // Get the selected date from query string (e.g., ?date=2024-12-20)
+        // Get the selected date from query string 
         $date = $request->date ? Carbon::parse($request->date) : Carbon::tomorrow();
-        $dayOfWeek = $date->englishDayOfWeek; // Monday, Tuesday, etc.
+        $dayOfWeek = $date->englishDayOfWeek; 
 
         // Get doctor's availability for this day
         $availability = $doctor->availability()->where('day_of_week', $dayOfWeek)->first();
@@ -25,7 +25,7 @@ class AppointmentController extends Controller
             return back()->with('error', 'Doctor is not available on this day.');
         }
 
-        // Generate 30-minute time slots based on availability
+        // Generate slots based on availability
         $startTime = Carbon::parse($availability->start_time);
         $endTime = Carbon::parse($availability->end_time);
         $slotDuration = $availability->slot_duration_minutes;
@@ -70,7 +70,7 @@ class AppointmentController extends Controller
         $patient = Auth::user();
         $date = Carbon::parse($request->appointment_date);
 
-        // Check if slot is still available (prevent double-booking)
+        // Check if slot is still available 
         $existingAppointment = Appointment::where('doctor_id', $doctor->id)
             ->where('appointment_date', $date->format('Y-m-d'))
             ->where('start_time', $request->start_time)
@@ -80,7 +80,7 @@ class AppointmentController extends Controller
             return back()->with('error', 'This time slot has already been booked. Please choose another time.');
         }
 
-        // Calculate end time (30 minutes later)
+        // Calculate end time 
         $start = Carbon::parse($request->start_time);
         $end = $start->copy()->addMinutes(30);
 
@@ -99,22 +99,21 @@ class AppointmentController extends Controller
             ->with('success', 'Appointment booked successfully!');
     }
 
-    // Cancel an appointment (FIXED VERSION)
+    // Cancel an appointment 
     public function cancel(Appointment $appointment)
     {
         if (Auth::id() !== $appointment->patient_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        // FIX: Use try-catch to handle any date parsing errors
         try {
             // Get raw values from the appointment
-            $date = $appointment->getRawOriginal('appointment_date'); // Get raw DB value
-            $time = $appointment->getRawOriginal('start_time'); // Get raw DB value
+            $date = $appointment->getRawOriginal('appointment_date'); 
+            $time = $appointment->getRawOriginal('start_time'); 
             
             // Check if date and time are valid
             if (empty($date) || empty($time)) {
-                // If date/time missing, just cancel without date check
+        
                 $appointment->update(['status' => 'cancelled']);
                 return back()->with('success', 'Appointment cancelled successfully.');
             }
@@ -128,9 +127,9 @@ class AppointmentController extends Controller
             }
             
         } catch (\Exception $e) {
-            // If there's any error in date parsing, log it and allow cancellation anyway
+           
             \Log::error("Error parsing appointment datetime for ID {$appointment->id}: " . $e->getMessage());
-            // Continue with cancellation (better user experience)
+           
         }
 
         $appointment->update(['status' => 'cancelled']);
@@ -138,7 +137,7 @@ class AppointmentController extends Controller
         return back()->with('success', 'Appointment cancelled successfully.');
     }
     
-    // Alternative simpler cancel method (use this if above still has issues)
+    // Alternative simpler cancel method 
     public function cancelSimple(Appointment $appointment)
     {
         if (Auth::id() !== $appointment->patient_id) {

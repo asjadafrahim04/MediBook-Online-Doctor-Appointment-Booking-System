@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('slot_duration_minutes')->default(30);
             $table->timestamps();
 
-            // One schedule per day per doctor
             $table->unique(['doctor_id', 'day_of_week']);
         });
     }

@@ -22,13 +22,10 @@ class DoctorScheduleController extends Controller
 
         $doctor = $user->doctor;
 
-        // Load existing availability, grouped by day for easy access
         $availability = $doctor->availability->keyBy('day_of_week');
 
-        // List of days for the form
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-        // Fixed: view name matches file location resources/views/doctors/schedule.blade.php
         return view('doctors.schedule', compact('doctor', 'availability', 'days'));
     }
 

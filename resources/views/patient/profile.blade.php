@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                                        <!-- Profile Photo -->
+                    <!-- Profile Photo -->
                     <div class="text-center mb-10">
                         <div class="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg border-4 border-blue-100">
                             <img src="{{ Auth::user()->profile_photo_url }}" 
@@ -37,7 +37,7 @@
                                    class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
 
-                        <!-- Email (Read-only) -->
+                        <!-- Email -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Email
@@ -113,9 +113,8 @@
                         </form>
                     </div>
 
-                    <!-- Danger Zone -->
+                   
                     <div class="mt-12 pt-8 border-t border-gray-200">
-                        <h3 class="text-xl font-semibold text-red-700 mb-6">Danger Zone</h3>
 
                         <!-- Logout -->
                         <div class="mb-8 text-center">

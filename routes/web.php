@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\DoctorManagementController as AdminDoctorControll
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 
-// Home Page (Public)
+// Home Page
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // === CUSTOM PATIENT PROFILE ===
+    // === PATIENT PROFILE ===
     Route::get('/profile', [PatientProfileController::class, 'show'])->name('patient.profile');
     Route::patch('/profile', [PatientProfileController::class, 'update'])->name('patient.profile.update');
     Route::patch('/profile/password', [PatientProfileController::class, 'changePassword'])->name('patient.password.update');

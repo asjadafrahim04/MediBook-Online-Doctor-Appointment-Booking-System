@@ -34,7 +34,6 @@ class Doctor extends Model
 
     /**
      * Get the user that owns the doctor profile.
-     * One-to-one inverse relationship
      */
     public function user()
     {
@@ -43,7 +42,6 @@ class Doctor extends Model
 
     /**
      * Get the availability records for the doctor.
-     * One-to-many relationship
      */
     public function availability()
     {

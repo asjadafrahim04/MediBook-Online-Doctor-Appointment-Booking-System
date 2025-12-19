@@ -36,7 +36,7 @@ class DoctorManagementController extends Controller
      */
     public function reject(Doctor $doctor)
     {
-        $doctor->delete(); // Delete the record on rejection to remove profile
+        $doctor->delete(); 
 
         return redirect()->route('admin.doctors.index')
             ->with('success', 'Doctor rejected and profile removed successfully!');

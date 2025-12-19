@@ -37,15 +37,15 @@ class RegisteredUserController extends Controller
         'password' => Hash::make($request->password),
     ]);
 
-    // FIX: Create doctor record for new doctors
+    // Create doctor record for new doctors
     if ($user->role === 'doctor') {
         $user->doctor()->create([
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $user->phone,
-            'specialization' => 'General Physician', // Default value to avoid null error
-            'qualification' => 'MBBS', // Default
-            'experience_years' => 0, // Default
+            'specialization' => 'General Physician', 
+            'qualification' => 'MBBS',
+            'experience_years' => 0, 
             'status' => 'pending',
         ]);
     }

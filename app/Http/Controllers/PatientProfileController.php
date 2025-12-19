@@ -21,7 +21,7 @@ class PatientProfileController extends Controller
             abort(403, 'Unauthorized access.');
         }
 
-        // Load upcoming appointments (we'll add real query later)
+        // Load upcoming appointments 
         $appointments = collect();
 
         return view('patient.profile', compact('user', 'appointments'));
@@ -51,7 +51,6 @@ class PatientProfileController extends Controller
 
         // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
-            // Delete old photo if exists
             if ($user->profile_photo) {
                 Storage::disk('public')->delete($user->profile_photo);
             }
@@ -61,7 +60,6 @@ class PatientProfileController extends Controller
 
         $user->update($data);
 
-        // Fixed: use correct route name 'patient.profile'
         return redirect()->route('patient.profile')->with('status', 'Profile updated successfully!');
     }
 

@@ -45,7 +45,7 @@
                                        class="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500">
                             </div>
 
-                            <!-- Email (Display Only) -->
+                            <!-- Email -->
                             <div>
                                 <label class="block text-lg font-medium text-gray-700 mb-2">
                                     Email
@@ -122,9 +122,9 @@
                         </form>
                     </div>
 
-                    <!-- Danger Zone -->
+                    
                     <div class="border-t-4 border-red-200 pt-8">
-                        <h2 class="text-2xl font-bold text-red-800 mb-6">Danger Zone</h2>
+                        
 
                         <!-- Logout -->
                         <div class="mb-8">
