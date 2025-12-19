@@ -89,11 +89,12 @@
                                     </p>
                                 </a>
 
-                                <a href="#" class="block p-8 bg-teal-50 rounded-lg hover:bg-teal-100 transition border border-teal-200">
-                                    <div class="text-5xl mb-4">📊</div>
-                                    <h3 class="text-xl font-semibold text-teal-800">System Overview</h3>
-                                    <p class="text-gray-600 mt-2">
-                                        View statistics and reports (coming soon)
+                                <!-- System Overview Card - Clickable to Full Page -->
+                                <a href="{{ route('admin.overview') }}" class="block p-8 bg-teal-50 rounded-lg hover:bg-teal-100 transition border border-teal-200">
+                                    <div class="text-5xl mb-4 text-center">📊</div>
+                                    <h3 class="text-xl font-semibold text-teal-800 text-center mb-2">System Overview</h3>
+                                    <p class="text-gray-600 text-center">
+                                        View statistics and reports
                                     </p>
                                 </a>
                             </div>
