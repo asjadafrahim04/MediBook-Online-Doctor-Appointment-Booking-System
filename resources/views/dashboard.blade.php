@@ -72,17 +72,29 @@
                                 Manage the MediBook system
                             </p>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <a href="{{ route('admin.doctors.index') }}" class="block p-8 bg-red-50 rounded-lg hover:bg-red-100 transition border border-red-200">
                                     <div class="text-5xl mb-4">👨‍⚕️</div>
                                     <h3 class="text-xl font-semibold text-red-800">Manage Doctors</h3>
-                                    <p class="text-gray-600 mt-2">Approve or reject doctor registrations</p>
+                                    <p class="text-gray-600 mt-2">
+                                        Approve or reject doctor registrations
+                                    </p>
                                 </a>
 
-                                <a href="#" class="block p-8 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition border border-indigo-200">
+                                <a href="{{ route('admin.users.index') }}" class="block p-8 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition border border-indigo-200">
+                                    <div class="text-5xl mb-4">👥</div>
+                                    <h3 class="text-xl font-semibold text-indigo-800">Manage Users</h3>
+                                    <p class="text-gray-600 mt-2">
+                                        List, block/unblock, delete users
+                                    </p>
+                                </a>
+
+                                <a href="#" class="block p-8 bg-teal-50 rounded-lg hover:bg-teal-100 transition border border-teal-200">
                                     <div class="text-5xl mb-4">📊</div>
-                                    <h3 class="text-xl font-semibold text-indigo-800">System Overview</h3>
-                                    <p class="text-gray-600 mt-2">View statistics and reports (coming soon)</p>
+                                    <h3 class="text-xl font-semibold text-teal-800">System Overview</h3>
+                                    <p class="text-gray-600 mt-2">
+                                        View statistics and reports (coming soon)
+                                    </p>
                                 </a>
                             </div>
                         </div>

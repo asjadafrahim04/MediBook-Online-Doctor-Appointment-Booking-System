@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PublicDoctorController; 
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\AppointmentController;
@@ -9,8 +9,9 @@ use App\Http\Controllers\PatientAppointmentController;
 use App\Http\Controllers\PatientProfileController;
 use App\Http\Controllers\DoctorTodayPatientsController;
 use App\Http\Controllers\DoctorAllAppointmentsController;
-use App\Http\Controllers\Admin\DoctorController as AdminDoctorController;
+use App\Http\Controllers\Admin\DoctorManagementController as AdminDoctorController;
 use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 // Home Page (Public)
 Route::get('/', function () {
@@ -35,8 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [PatientProfileController::class, 'deleteAccount'])->name('patient.account.delete');
 
     // === PATIENT FEATURES ===
-    Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
-    Route::get('/doctors/{doctor}', [DoctorController::class, 'show'])->name('doctors.show');
+    Route::get('/doctors', [PublicDoctorController::class, 'index'])->name('doctors.index');
+    Route::get('/doctors/{doctor}', [PublicDoctorController::class, 'show'])->name('doctors.show');
     Route::get('/patient/appointments', [PatientAppointmentController::class, 'index'])->name('patient.appointments');
 
     // === DOCTOR FEATURES ===
@@ -76,5 +77,12 @@ Route::middleware('auth')->group(function () {
         Route::patch('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
         Route::patch('/admin/profile/password', [AdminProfileController::class, 'changePassword'])->name('admin.profile.password.update');
         Route::delete('/admin/profile', [AdminProfileController::class, 'deleteAccount'])->name('admin.profile.delete');
+
+        // User Management Routes
+        Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::post('/admin/users/{user}/block', [AdminUserController::class, 'block'])->name('admin.users.block');
+        Route::post('/admin/users/{user}/unblock', [AdminUserController::class, 'unblock'])->name('admin.users.unblock');
+        Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
     });
 });
