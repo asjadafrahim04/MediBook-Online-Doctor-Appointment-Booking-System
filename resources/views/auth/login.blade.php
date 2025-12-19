@@ -1,7 +1,11 @@
 <x-guest-layout>
-    <div class="max-w-md mx-auto">
-        <h2 class="text-3xl font-bold text-center text-blue-700 mb-8">Welcome Back</h2>
-        <p class="text-center text-gray-600 mb-10">Login to your MediBook account</p>
+    <div class="max-w-lg mx-auto">  
+        <!-- MediBook Logo  -->
+        <div class="text-center mb-10">
+            <img src="{{ asset('images/medibook-logo.png') }}" alt="MediBook Logo" class="w-40 mx-auto">
+            <h2 class="text-3xl font-bold text-center text-blue-700 mt-6">Welcome Back</h2>
+            <p class="text-center text-gray-600 mt-2">Login to your MediBook account</p>
+        </div>
 
         <form method="POST" action="{{ route('login') }}">
             @csrf

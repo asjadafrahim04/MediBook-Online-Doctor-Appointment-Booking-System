@@ -1,7 +1,11 @@
 <x-guest-layout>
     <div class="max-w-md mx-auto">
-        <h2 class="text-3xl font-bold text-center text-blue-700 mb-8">Create Account</h2>
-        <p class="text-center text-gray-600 mb-10">Join MediBook today</p>
+        <!-- MediBook Logo  -->
+        <div class="text-center mb-10">
+            <img src="{{ asset('images/medibook-logo.png') }}" alt="MediBook Logo" class="w-40 mx-auto">
+            <h2 class="text-3xl font-bold text-center text-blue-700 mt-6">Create Account</h2>
+            <p class="text-center text-gray-600 mt-2">Join MediBook today</p>
+        </div>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
@@ -35,7 +39,7 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
-            <!-- Phone (Optional) -->
+            <!-- Phone -->
             <div class="mb-6">
                 <x-input-label for="phone" :value="__('Phone Number (Optional)')" />
                 <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" placeholder="e.g. 03001234567" />
