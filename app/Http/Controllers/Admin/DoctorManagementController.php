@@ -6,25 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 
-class DoctorController extends Controller
+class DoctorManagementController extends Controller
 {
     /**
-     * Display a list of all registered doctors with search
+     * Display a list of all doctors with their user details
      */
-    public function index(Request $request)
+    public function index()
     {
-        $search = $request->get('search');
-
         $doctors = Doctor::with('user')
-            ->when($search, function ($query, $search) {
-                return $query->whereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%");
-                })->orWhere('specialization', 'like', "%{$search}%");
-            })
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.doctors.index', compact('doctors', 'search'));
+        return view('admin.doctors.index', compact('doctors'));
     }
 
     /**
@@ -43,9 +36,9 @@ class DoctorController extends Controller
      */
     public function reject(Doctor $doctor)
     {
-        $doctor->update(['status' => 'rejected']);
+        $doctor->delete(); // Delete the record on rejection to remove profile
 
         return redirect()->route('admin.doctors.index')
-            ->with('success', 'Doctor rejected successfully!');
+            ->with('success', 'Doctor rejected and profile removed successfully!');
     }
 }
