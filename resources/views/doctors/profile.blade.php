@@ -171,9 +171,9 @@
                         </form>
                     </div>
 
-                    <!-- Danger Zone -->
+                   
                     <div class="border-t-4 border-red-200 pt-8">
-                        <h2 class="text-2xl font-bold text-red-800 mb-6">Danger Zone</h2>
+                      
 
                         <!-- Logout -->
                         <div class="mb-8">

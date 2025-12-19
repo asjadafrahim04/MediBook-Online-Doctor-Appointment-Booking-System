@@ -4,13 +4,13 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-8 text-gray-900">
 
-                    <!-- Common Welcome -->
+                    <!-- Welcome -->
                     <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">
                         Welcome back, {{ auth()->user()->name }}!
                     </h1>
 
                     @if(auth()->user()->role === 'patient')
-                        <!-- Patient Dashboard - Only 3 Cards -->
+                        <!-- Patient Dashboard -->
                         <div class="text-center">
                             <p class="text-xl text-gray-700 mb-8">
                                 Book your next appointment easily
@@ -38,7 +38,7 @@
                         </div>
 
                     @elseif(auth()->user()->role === 'doctor')
-                        <!-- Doctor Dashboard - Only 3 Cards -->
+                        <!-- Doctor Dashboard -->
                         <div class="text-center">
                             <p class="text-xl text-gray-700 mb-8">
                                 Manage your schedule and patients
@@ -89,7 +89,7 @@
                                     </p>
                                 </a>
 
-                                <!-- System Overview Card - Clickable to Full Page -->
+                                <!-- System Overview Card -->
                                 <a href="{{ route('admin.overview') }}" class="block p-8 bg-teal-50 rounded-lg hover:bg-teal-100 transition border border-teal-200">
                                     <div class="text-5xl mb-4 text-center">📊</div>
                                     <h3 class="text-xl font-semibold text-teal-800 text-center mb-2">System Overview</h3>

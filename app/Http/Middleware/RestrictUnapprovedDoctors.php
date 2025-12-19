@@ -11,7 +11,7 @@ class RestrictUnapprovedDoctors
 {
     public function handle(Request $request, Closure $next): Response
 {
-    // Skip for logout request to prevent interference
+    
     if ($request->is('logout')) {
         return $next($request);
     }
@@ -19,7 +19,6 @@ class RestrictUnapprovedDoctors
     $user = Auth::user();
 
     if ($user && $user->role === 'doctor') {
-        // Skip check if already on pending page
         if ($request->path() === 'doctor/pending') {
             return $next($request);
         }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('symptoms')->nullable();
             $table->timestamps();
 
-            // Prevent double-booking
+           
             $table->unique(['doctor_id', 'appointment_date', 'start_time']);
         });
     }

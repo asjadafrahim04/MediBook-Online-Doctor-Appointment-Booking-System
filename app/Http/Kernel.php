@@ -9,7 +9,7 @@ class Kernel extends HttpKernel
     /**
      * The application's global HTTP middleware stack.
      *
-     * These middleware are run during every request to your application.
+     * These middleware are run during every request to application.
      *
      * @var array<int, class-string|string>
      */
@@ -36,7 +36,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\RestrictUnapprovedDoctors::class, // Added to restrict unapproved doctors
+            \App\Http\Middleware\RestrictUnapprovedDoctors::class, 
         ],
 
         'api' => [
@@ -65,6 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
-        'restrict.unapproved.doctors' => \App\Http\Middleware\RestrictUnapprovedDoctors::class, // Added for doctor approval check
+        'restrict.unapproved.doctors' => \App\Http\Middleware\RestrictUnapprovedDoctors::class, 
     ];
 }

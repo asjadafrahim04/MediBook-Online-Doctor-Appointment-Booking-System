@@ -62,7 +62,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the appointments where this user is the doctor (through doctor relationship).
+     * Get the appointments where this user is the doctor 
      */
     public function appointmentsAsDoctor()
     {
