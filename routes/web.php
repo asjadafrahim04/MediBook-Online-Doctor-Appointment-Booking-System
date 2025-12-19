@@ -84,5 +84,54 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/users/{user}/unblock', [AdminUserController::class, 'unblock'])->name('admin.users.unblock');
         Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
         Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+
+        // System Overview Route
+        Route::get('/admin/overview', function () {
+            $totalPatients = \App\Models\User::where('role', 'patient')->count();
+            $totalDoctors = \App\Models\Doctor::count();
+            $totalAppointments = \App\Models\Appointment::count();
+            $pendingDoctors = \App\Models\Doctor::where('status', 'pending')->count();
+
+            // Last 7 days appointments
+            $appointmentsData = \App\Models\Appointment::selectRaw('DATE(created_at) as date, count(*) as count')
+                ->where('created_at', '>=', now()->subDays(7))
+                ->groupBy('date')
+                ->orderBy('date')
+                ->pluck('count', 'date');
+
+            $appointmentsLabels = [];
+            $appointmentsCounts = [];
+            for ($i = 6; $i >= 0; $i--) {
+                $date = now()->subDays($i)->format('Y-m-d');
+                $appointmentsLabels[] = now()->subDays($i)->format('M d');
+                $appointmentsCounts[] = $appointmentsData->get($date, 0);
+            }
+
+            // Last 6 months doctor registrations
+            $registrationsData = \App\Models\Doctor::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, count(*) as count')
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month');
+
+            $registrationsLabels = [];
+            $registrationsCounts = [];
+            for ($i = 5; $i >= 0; $i--) {
+                $month = now()->subMonths($i)->format('Y-m');
+                $registrationsLabels[] = now()->subMonths($i)->format('M Y');
+                $registrationsCounts[] = $registrationsData->get($month, 0);
+            }
+
+            return view('admin.overview', compact(
+                'totalPatients',
+                'totalDoctors',
+                'totalAppointments',
+                'pendingDoctors',
+                'appointmentsLabels',
+                'appointmentsCounts',
+                'registrationsLabels',
+                'registrationsCounts'
+            ));
+        })->name('admin.overview');
     });
 });
